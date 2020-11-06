@@ -1,37 +1,35 @@
-﻿using UnityEngine;
-using Wowsome.Core;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Wowsome {
   namespace GameMaker {
-    public interface IRootController {
-      RectTransform MainRoot { get; }
-      //   void RetainComponent(IComponent comp);
-      //   void OnComponentProcessed(IComponentController processor, IComponent comp);
-      //   void BeginComponentInteraction(PtdObject obj);
-      //   void ProcessComponentInteraction(PtdObject obj);
-      //   void BroadcastEvent(PtdObject obj, BaseSenderEv ev);
-      //   void ToScene(string sceneId);
-      //   PtdObject GetObjectById(string id);
+    [Serializable]
+    public class SenderEv {
+      public string id;
+      public List<string> data = new List<string>();
+
+      public SenderEv(string theId, List<string> d) {
+        id = theId;
+        data = d;
+      }
+
+      public SenderEv(string theId, string d) : this(theId, new List<string> { d }) { }
+
+      public bool Matches<T>(List<T> other, out T t) where T : ReceiverEv {
+        t = other.Find(x => {
+          string[] splitQuery = x.query.Trim().Split(',');
+          if (splitQuery.Length == 0) return false;
+          if (splitQuery.Length <= 1) return id == splitQuery[0];
+          // ugly but leave it for now
+          return splitQuery[0] == id && splitQuery[1] == data[0];
+        });
+        return t != null;
+      }
     }
 
-    public interface IComponent {
-      string ComponentId { get; set; }
-      WGMObject Owner { get; set; }
-      void InitComponent(ISceneStarter sceneStarter, IRootController gameController);
-      void OnAwakeGame();
-      void OnStartGame();
-      void Reinit();
-      void OnLoaded();
-    }
-
-    public interface IActiveComponent : IComponent {
-      bool IsActive { get; set; }
-      //   bool OnReceiveEvent(BaseSenderEv ev, EventScope scope);
-      //   void BroadcastEvent(BaseSenderEv ev);
-    }
-
-    public interface IUpdateableComponent : IComponent {
-      void UpdateComponent(float dt);
+    public class ReceiverEv {
+      public string query;
+      public List<string> data = new List<string>();
     }
   }
 }

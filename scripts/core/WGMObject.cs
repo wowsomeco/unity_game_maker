@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Wowsome.Core;
+using Wowsome.Generic;
 
 namespace Wowsome {
   namespace GameMaker {
@@ -11,14 +13,27 @@ namespace Wowsome {
         public int y;
       }
 
-      public List<WGMComponent> Components = new List<WGMComponent>();
-
-      public RectTransform RootTransform { get; private set; }
-
       Dictionary<string, WGMComponent> _components = new Dictionary<string, WGMComponent>();
 
-      public void AddObjectComponent(WGMComponent c) {
+      public CavEngine Engine { get; private set; }
 
+      public WObservable<SenderEv> Observable { get; private set; }
+
+      public void InitObject(CavEngine engine) {
+        Engine = engine;
+        Observable = new WObservable<SenderEv>(null);
+
+        var components = GetComponentsInChildren<WGMComponent>(true);
+        foreach (WGMComponent c in components) {
+          c.InitComponent(this);
+          _components[c.Model.id] = c;
+        }
+      }
+
+      public void UpdateObject(float dt) {
+        foreach (var c in _components) {
+          c.Value.UpdateComponent(dt);
+        }
       }
     }
   }
