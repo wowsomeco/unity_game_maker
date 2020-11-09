@@ -24,9 +24,14 @@ namespace Wowsome {
         Observable = new WObservable<SenderEv>(null);
 
         var components = GetComponentsInChildren<WGMComponent>(true);
+        // init them all
         foreach (WGMComponent c in components) {
           c.InitComponent(this);
           _components[c.Model.id] = c;
+        }
+        // start
+        foreach (var kv in _components) {
+          kv.Value.StartComponent();
         }
       }
 

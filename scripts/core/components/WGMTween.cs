@@ -40,7 +40,7 @@ namespace Wowsome.GameMaker {
 
       obj.Observable.Subscribe(ev => {
         TweenEv te;
-        if (ev.Matches<TweenEv>(_triggers, out te)) {
+        if (ev.Matches(this, _triggers, out te)) {
           TryPlaySound(te.startSound);
           TryBroadcastEvent(te.startEv);
 
