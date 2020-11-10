@@ -1,17 +1,18 @@
 # Wowsome Game Maker
 
 The sets of functionalities that allow each gameobject to have multiple [Active Components](https://github.com/wowsomeco/unity_game_maker/tree/master/scripts/core/components) that is reactive to events that can be either received or sent the chain reaction(s) in form of another events accordingly.
-This is more geared towards 2D stuff in Unity, where at the moment it's more specific to UGUI thingy. We might need to tweak the stuff more to handle Sprite Renderer too eventually should there be more projects that require it.
+This is more geared towards 2D stuff in Unity, where at the moment it's more specific to Unity UI thingy. We might need to tweak the stuff more to handle Sprite Renderer too eventually should there be more projects that require it.
 
 ## How To Use
 
+In your Unity Project root :
+
 Add [wowcore](https://github.com/wowsomeco/unity_wowcore.git) as the submodule dependency first
 ```sh
-git submodule add https://github.com/wowsomeco/unity_wowcore.git wcore
+git submodule add https://github.com/wowsomeco/unity_wowcore.git Assets/wcore
 ```
 
 Then add this repo as a submodule in your Unity Project e.g.
-
 ```sh
 git submodule add https://github.com/wowsomeco/unity_game_maker.git Assets/wgamemaker
 ```
@@ -31,7 +32,7 @@ The items below need to be added as submodules into your project in order to use
 
 ## Roadmap
 
-* Object can communicate with each other.
-* More components e.g. Gesture Handlers, Counter, Timer, etc.
+* Object can communicate with each other (Event Hub)
+* Add more awesome components e.g. Screen Transition, Stepper, Timer, etc.
 * Node Editor to generate the Object(s) along with its component(s) + event handler(s) accordingly.
 * More docs, and sample scenes.

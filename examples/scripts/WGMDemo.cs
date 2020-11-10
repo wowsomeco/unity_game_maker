@@ -1,17 +1,20 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Wowsome.Core;
 
 namespace Wowsome.GameMaker {
   public class WGMDemo : MonoBehaviour {
-    WGMObject _object;
+    List<WGMObject> _objects;
 
     void Start() {
-      _object = GetComponentInChildren<WGMObject>();
-      _object.InitObject(CavEngine.Instance);
+      _objects = new List<WGMObject>(GetComponentsInChildren<WGMObject>(true));
+      _objects.ForEach(obj => obj.InitObject(CavEngine.Instance));
     }
 
     void Update() {
-      _object.UpdateObject(Time.deltaTime);
+      foreach (WGMObject o in _objects) {
+        o.UpdateObject(Time.deltaTime);
+      }
     }
   }
 }

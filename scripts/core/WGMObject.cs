@@ -29,6 +29,11 @@ namespace Wowsome {
         public int y;
       }
 
+      /// <summary>
+      /// when it's true, it will show all the received and sent events from this component
+      /// </summary>
+      public bool DebugMode;
+
       [SerializeField] Model _model;
       Dictionary<string, WGMComponent> _components = new Dictionary<string, WGMComponent>();
 

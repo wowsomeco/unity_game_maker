@@ -28,7 +28,7 @@ namespace Wowsome {
           return matches && Compare(splitQuery[1], data[0]);
         });
 
-        if (t != null) {
+        if (t != null && component.Object.DebugMode) {
           Print.Log(string.Format("{0}|RECEIVES|{1}", component.Info, t.data.Flatten()), "cyan");
         }
 

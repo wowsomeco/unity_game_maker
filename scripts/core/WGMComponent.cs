@@ -43,7 +43,7 @@ namespace Wowsome.GameMaker {
       if (!ev.IsEmpty()) {
         Object.Observable.Next(new SenderEv(Id, ev));
 
-        Print.Log(string.Format("{0}|SENDS|{1}", Info, ev.Flatten()), "orange");
+        if (Object.DebugMode) Print.Log(string.Format("{0}|SENDS|{1}", Info, ev.Flatten()), "orange");
       }
     }
 
