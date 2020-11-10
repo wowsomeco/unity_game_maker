@@ -5,6 +5,19 @@ using Wowsome.Audio;
 using Wowsome.Tween;
 
 namespace Wowsome.GameMaker {
+  /// <summary>
+  /// Tween Component that plays tween on any _triggers accordingly.
+  /// Ideally, one WGMObject can have one or many WGMTween.  
+  /// On Init, WGMTween will trace down the children and get the reference of each ITween in the children gameobjects.
+  /// 
+  /// BEST PRACTICE : dont nest WGMTween inside another since it might be completely unnecessary and might behave unexpectedly,
+  /// since the parent will grab all the ITween(s) inside the children, where the children also have the references for the same ITween(s), 
+  /// which might create a black hole.
+  /// 
+  /// REQUIRED: It needs to have AudioSystem in CavEngine with SfxManager attached to it.  
+  /// 
+  /// Look into TweenEv below for more details.    
+  /// </summary>
   public class WGMTween : WGMComponent {
     [Serializable]
     public class TweenEv : ReceiverEv {

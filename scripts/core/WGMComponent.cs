@@ -25,7 +25,7 @@ namespace Wowsome.GameMaker {
 
     public string Info {
       get {
-        return string.Format("{0}.{1}.{2}", Object.name, ComponentType, Id);
+        return string.Format("{0}.{1}.{2}", Object.Id, ComponentType, Id);
       }
     }
 

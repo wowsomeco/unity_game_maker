@@ -40,16 +40,44 @@ namespace Wowsome {
         string l = lhs.Standardize();
         string r = rhs.Standardize();
 
-        if (l.StartsWith(indicator)) return r.StartsWith(l.Replace(indicator, ""));
-        if (l.EndsWith(indicator)) return r.EndsWith(l.Replace(indicator, ""));
+        // check query whether it starts or ends with the special character
+        bool startsWith = l.StartsWith(indicator);
+        bool endsWith = l.EndsWith(indicator);
 
+        if (startsWith || endsWith) {
+          string normal = l.Replace(indicator, "");
+
+          if (startsWith) return r.StartsWith(normal);
+          else if (endsWith) return r.EndsWith(normal);
+          else if (startsWith && endsWith) return r.Contains(normal);
+        }
+
+        // no special char found, compare normally
         return r == l;
       }
     }
 
+    /// <summary>
+    /// The base class of the Receiver event. 
+    /// </summary>
     [Serializable]
     public class ReceiverEv {
+      /// <summary>
+      /// The query that will be compared to the SenderEv.
+      /// the idea is the query might contain the special character '*' e.g.
+      /// '*tw' means starts with comparison
+      /// 'tw*' means ends with
+      /// '*tw*' means contains in any
+      /// 
+      /// when there is no '*' given, the comparison will be performed normally.   
+      /// TODO: we might need add more queries later eventually.
+      /// </summary>
       public string query;
+      /// <summary>
+      /// The generic data that might vary accordingly.
+      /// e.g. 
+      /// for WGMTween, the list of data indicates the tween ids that will be looked into and played whenever the event gets triggered
+      /// </summary>
       public List<string> data = new List<string>();
     }
   }

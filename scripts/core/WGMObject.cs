@@ -6,14 +6,38 @@ using Wowsome.Generic;
 
 namespace Wowsome {
   namespace GameMaker {
+    /// <summary>
+    /// The Game Object that can have one or more WGMComponent (s).
+    /// - On Init, it will find all the WGMComponent in its root.
+    /// - Right now it cant have nested WGMObject in it, might eventually be able to do so but dont do it for now.
+    /// - Observable is the event hub where every WGMComponent can both send and receive events.
+    /// </summary>
     public class WGMObject : MonoBehaviour {
+      /// <summary>
+      /// The Object Model.
+      /// The idea is to be able to save the model as json so that we can eventually generate the object(s) from the json files.
+      /// 
+      /// - right now, if the id is undefined, it will auto add from the gameobject name on init.
+      /// - not really usable for now as we dont have node editor yet, it's still very much WIP too.
+      /// </summary>
       [Serializable]
       public class Model {
+        public string id;
+        [HideInInspector]
         public int x;
+        [HideInInspector]
         public int y;
       }
 
+      [SerializeField] Model _model;
       Dictionary<string, WGMComponent> _components = new Dictionary<string, WGMComponent>();
+
+      public string Id {
+        get {
+          if (_model.id.IsEmpty()) _model.id = name;
+          return _model.id;
+        }
+      }
 
       public CavEngine Engine { get; private set; }
 
