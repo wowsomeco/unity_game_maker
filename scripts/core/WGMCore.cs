@@ -21,11 +21,11 @@ namespace Wowsome {
           // dont do anything if it's nothing
           if (splitQuery.Length == 0) return false;
           // it means that the query only contains single string e.g. 'done'
-          if (splitQuery.Length == 1) return id.CompareStandard(splitQuery[0]);
+          bool matches = Compare(splitQuery[0], id);
+          if (splitQuery.Length == 1) return matches;
           // this handles the comma separated query.
-          // e.g. lg,done
-          // TODO: need some more details re:this
-          return id.CompareStandard(splitQuery[0]) && data[0].CompareStandard(splitQuery[1]);
+          // e.g. lg,done where 'lg' is the id and 'done' is the event          
+          return matches && Compare(splitQuery[1], data[0]);
         });
 
         if (t != null) {
@@ -33,6 +33,17 @@ namespace Wowsome {
         }
 
         return t != null;
+      }
+
+      bool Compare(string lhs, string rhs) {
+        const string indicator = "*";
+        string l = lhs.Standardize();
+        string r = rhs.Standardize();
+
+        if (l.StartsWith(indicator)) return r.StartsWith(l.Replace(indicator, ""));
+        if (l.EndsWith(indicator)) return r.EndsWith(l.Replace(indicator, ""));
+
+        return r == l;
       }
     }
 

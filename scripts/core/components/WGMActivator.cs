@@ -1,38 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Wowsome.GameMaker {
+  /// <summary>
+  /// Activator Component.  
+  /// it reacts according to the first index of the list data.
+  /// the data can be either show, hide or toggle.
+  /// once done, it will automagically broadcast the data again.
+  /// </summary>
   public class WGMActivator : WGMComponent {
-    /// <summary>
-    /// Activator Event.
-    /// when it gets triggered, it will process the list data.
-    /// for now it will get the first index of the string data.
-    /// the data can be either show, hide or toggle.
-    /// </summary>
-    [Serializable]
-    public class ActivatorEv : ReceiverEv {
-      public List<string> activatedEv;
-    }
+    readonly string Show = "show";
+    readonly string Hide = "hide";
+    readonly string Toggle = "toggle";
 
-    [SerializeField] List<ActivatorEv> _triggers = new List<ActivatorEv>();
+    [SerializeField] List<ReceiverEv> _triggers = new List<ReceiverEv>();
 
     Dictionary<string, Delegate<bool, GameObject>> _handlers = new Dictionary<string, Delegate<bool, GameObject>>();
 
     public override void InitComponent(WGMObject obj) {
       base.InitComponent(obj);
 
-      _handlers["show"] = g => true;
-      _handlers["hide"] = g => false;
-      _handlers["toggle"] = g => !g.activeSelf;
+      _handlers[Show] = g => true;
+      _handlers[Hide] = g => false;
+      _handlers[Toggle] = g => !g.activeSelf;
 
       obj.Observable.Subscribe(ev => {
-        ActivatorEv ae = null;
+        ReceiverEv ae = null;
         if (ev.Matches(this, _triggers, out ae)) {
           bool visible;
           if (ProcessData(ae.data, out visible)) {
             gameObject.SetActive(visible);
-            TryBroadcastEvent(ae.activatedEv);
+            // broadcast the visibility state.
+            // indicating that the event given has been triggered
+            TryBroadcastEvent(visible ? Show : Hide);
           }
         }
       });

@@ -27,7 +27,7 @@ namespace Wowsome {
         // init them all
         foreach (WGMComponent c in components) {
           c.InitComponent(this);
-          _components[c.Model.id] = c;
+          _components[c.Id] = c;
         }
         // start
         foreach (var kv in _components) {

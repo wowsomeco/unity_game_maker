@@ -11,11 +11,21 @@ namespace Wowsome.GameMaker {
 
     public ComponentModel Model;
 
-    public string Id { get { return Model.id; } }
+    public string Id {
+      get {
+        if (Model.id.IsEmpty()) Model.id = name;
+
+        return Model.id;
+      }
+    }
+
+    public string ComponentType {
+      get { return GetType().ToString().LastSplit('.').Replace("WGM", ""); }
+    }
 
     public string Info {
       get {
-        return string.Format("{0}.{1}.{2}", Object.name, GetType().ToString().LastSplit('.'), Id);
+        return string.Format("{0}.{1}.{2}", Object.name, ComponentType, Id);
       }
     }
 
@@ -35,6 +45,10 @@ namespace Wowsome.GameMaker {
 
         Print.Log(string.Format("{0}|SENDS|{1}", Info, ev.Flatten()), "orange");
       }
+    }
+
+    public void TryBroadcastEvent(string ev) {
+      TryBroadcastEvent(new List<string> { ev });
     }
   }
 }
