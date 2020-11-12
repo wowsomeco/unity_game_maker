@@ -18,6 +18,7 @@ namespace Wowsome.GameMaker {
   /// 
   /// Look into TweenEv below for more details.    
   /// </summary>
+  [DisallowMultipleComponent]
   public class WGMTween : WGMComponent {
     [Serializable]
     public class TweenEv : ReceiverEv {
@@ -46,8 +47,19 @@ namespace Wowsome.GameMaker {
     public override void InitComponent(WGMObject obj) {
       base.InitComponent(obj);
 
+      // iterate over the children...
+      // dont include the children that have another WGMTween too.
+      List<GameObject> children = new List<GameObject>();
+      gameObject.IterateSelfAndChildren(go => {
+        bool stopIteration = !go.Same(gameObject) && go.HasComponent<WGMTween>();
+        if (stopIteration) return false;
+
+        children.Add(go);
+        return true;
+      });
+      // add the children object that has tweens to our container
       _tweener = new CTweenChainer();
-      _tweener.Add(gameObject, true);
+      _tweener.Add(children.ToArray());
       // cache the sfx manager
       _sfx = obj.Engine.GetSystem<AudioSystem>().GetManager<SfxManager>();
 
