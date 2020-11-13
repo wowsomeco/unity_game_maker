@@ -69,6 +69,8 @@ namespace Wowsome.GameMaker {
           TryPlaySound(te.startSound);
           TryBroadcastEvent(te.startEv);
 
+          if (_tweener.IsPlaying) { _tweener.FastForward(); }
+
           _tweener.PlayExistingTween(
             te.data,
             () => {
