@@ -38,6 +38,10 @@ namespace Wowsome.GameMaker {
       /// The sound fx that will be played on done play tween
       /// </summary>      
       public List<SfxData> doneSound = new List<SfxData>();
+      /// <summary>
+      /// True = stop the tween, False = play the tween
+      /// </summary>
+      public bool stop;
     }
 
     [SerializeField] List<TweenEv> _triggers = new List<TweenEv>();
@@ -69,15 +73,28 @@ namespace Wowsome.GameMaker {
           TryPlaySound(te.startSound);
           TryBroadcastEvent(te.startEv);
 
-          if (_tweener.IsPlaying) { _tweener.FastForward(); }
-
-          _tweener.PlayExistingTween(
-            te.data,
-            () => {
-              TryPlaySound(te.doneSound);
-              TryBroadcastEvent(te.doneEv);
+          if (te.stop) {
+            // when data is empty, stop all
+            // otherwise iterate over the list data and stop them
+            if (te.data.IsEmpty()) {
+              _tweener.Stop();
+            } else {
+              te.data.ForEach(d => _tweener.StopTween(d));
             }
-          );
+          } else {
+            // stop first if still playing;
+            if (_tweener.IsPlaying) {
+              _tweener.Stop();
+            }
+
+            _tweener.PlayExistingTween(
+              te.data,
+              () => {
+                TryPlaySound(te.doneSound);
+                TryBroadcastEvent(te.doneEv);
+              }
+            );
+          }
         }
       });
     }
