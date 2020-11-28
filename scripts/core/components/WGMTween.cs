@@ -73,13 +73,17 @@ namespace Wowsome.GameMaker {
           TryPlaySound(te.startSound);
           TryBroadcastEvent(te.startEv);
 
+          _tweener.FastForward();
+
           if (te.stop) {
             // when data is empty, stop all
-            // otherwise iterate over the list data and stop them
+            // otherwise iterate over the list data and stop them            
             if (te.data.IsEmpty()) {
               _tweener.Stop();
             } else {
-              te.data.ForEach(d => _tweener.StopTween(d));
+              te.data.ForEach(d => {
+                _tweener.StopTween(d);
+              });
             }
           } else {
             // stop first if still playing;
